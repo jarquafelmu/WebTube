@@ -67,8 +67,6 @@ export default function CategoryPills({
                 if (newTranslate < 0) return 0;
                 return newTranslate;
               });
-              // setIsLeftVisible(translate + TRANSLATE_AMOUNT < 0);
-              // // setIsRightVisible(translate + TRANSLATE_AMOUNT > 0);
             }}
             className="h-full aspect-square w-auto p-1.5"
           >
@@ -87,13 +85,14 @@ export default function CategoryPills({
                 if (!containerRef || !containerRef.current) return prev;
 
                 const newTranslate = prev + TRANSLATE_AMOUNT;
-                // clamp the minimum translate value to 0
+
+                // clamp the maximum translate value to the edge of the container
 
                 // get the full width of the container
                 const edge = containerRef.current.scrollWidth;
                 // get only the visible width of the container (the amount shown on the screen)
                 const width = containerRef.current.clientWidth;
-                if (newTranslate + width! >= edge!) return edge - width;
+                if (newTranslate + width >= edge) return edge - width;
 
                 return newTranslate;
               });
