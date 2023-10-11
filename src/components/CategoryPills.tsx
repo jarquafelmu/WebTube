@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "./Button";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CategoryPillsProps = {
   categories: string[];
@@ -8,17 +8,42 @@ type CategoryPillsProps = {
   onSelect: (category: string) => void;
 };
 
+const TRANSLATE_AMOUNT = 200;
+
 export default function CategoryPills({
   categories,
   selectedCategory,
   onSelect,
 }: CategoryPillsProps) {
+  const [translate, setTranslate] = useState(0); // [0, 200, 400, 600, 800, 1000
   const [isLeftVisible, setIsLeftVisible] = useState(false);
-  const [isRightVisible, setIsRightVisible] = useState(false);
+  const [isRightVisible, setIsRightVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef || !containerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const container = entries[0].target;
+      if (!container) return;
+
+      setIsLeftVisible(translate > 0);
+      setIsRightVisible(
+        translate + container.clientWidth < container.scrollWidth
+      );
+    });
+
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, [categories, translate]);
 
   return (
-    <div className="overflow-x-hidden relative">
-      <div className="flex whitespace-nowrap gap-3 transition-transform w-[max-content]">
+    <div className="overflow-x-hidden relative" ref={containerRef}>
+      <div
+        className="flex whitespace-nowrap gap-3 transition-transform w-[max-content]"
+        style={{ transform: `translateX(-${translate}px)` }}
+      >
         {categories.map((category) => (
           <Button
             key={category}
@@ -35,6 +60,16 @@ export default function CategoryPills({
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => {
+              setTranslate((prev) => {
+                const newTranslate = prev - TRANSLATE_AMOUNT;
+                // clamp the minimum translate value to 0
+                if (newTranslate < 0) return 0;
+                return newTranslate;
+              });
+              // setIsLeftVisible(translate + TRANSLATE_AMOUNT < 0);
+              // // setIsRightVisible(translate + TRANSLATE_AMOUNT > 0);
+            }}
             className="h-full aspect-square w-auto p-1.5"
           >
             <ChevronLeft />
@@ -46,6 +81,23 @@ export default function CategoryPills({
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => {
+              setTranslate((prev) => {
+                // if the containerRef is null, return the previous value
+                if (!containerRef || !containerRef.current) return prev;
+
+                const newTranslate = prev + TRANSLATE_AMOUNT;
+                // clamp the minimum translate value to 0
+
+                // get the full width of the container
+                const edge = containerRef.current.scrollWidth;
+                // get only the visible width of the container (the amount shown on the screen)
+                const width = containerRef.current.clientWidth;
+                if (newTranslate + width! >= edge!) return edge - width;
+
+                return newTranslate;
+              });
+            }}
             className="h-full aspect-square w-auto p-1.5"
           >
             <ChevronRight />
