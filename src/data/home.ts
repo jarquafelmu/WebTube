@@ -1,0 +1,15 @@
+export const categories = [
+  "All",
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Vue",
+  "Angular",
+  "Node",
+  "GraphQL",
+  "CSS",
+  "HTML",
+  "Svelte",
+  "Web Components",
+  "Testing",
+];
