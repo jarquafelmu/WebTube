@@ -1,3 +1,4 @@
+import { Search, Mic, Upload, Bell, User } from "lucide-react";
 import { VideoGridItemProps } from "../components/VideoGridItem";
 
 export const categories = [
@@ -146,3 +147,37 @@ export const videos: VideoGridItemProps[] = [
       "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
   },
 ];
+
+export const sideButtons = [
+  {
+    Icon: Search,
+    label: "Search",
+    href: "/search",
+    hiddenOnMedium: true,
+  },
+  {
+    Icon: Mic,
+    label: "Mic",
+    href: "/mic",
+    hiddenOnMedium: true,
+  },
+  {
+    Icon: Upload,
+    label: "Upload",
+    href: "/upload",
+    hiddenOnMedium: false,
+  },
+  {
+    Icon: Bell,
+    label: "Notifications",
+    href: "/notifications",
+    hiddenOnMedium: false,
+  },
+  {
+    Icon: User,
+    label: "Profile",
+    href: "/profile",
+    hiddenOnMedium: false,
+    onClick: () => {},
+  },
+] as const;

@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+* {
+  /* To give some control over the scrollbar in browsers that are not Chrome */
+  scrollbar-width: thin;
+}
+
+/* Webkit only works for Chrome browsers */
+*::-webkit-scrollbar {
+  @apply w-2 bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Use apply to access classes from Tailwind */
+  @apply bg-secondary-dark rounded-full;
+}
+
+.scrollbar-hidden::-webkit-scrollbar-thumb {
+  @apply bg-transparent;
+}
+
+
+.scrollbar-hidden:hover::-webkit-scrollbar-thumb {
+  @apply bg-secondary-border;
+}
